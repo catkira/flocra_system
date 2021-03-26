@@ -1,30 +1,53 @@
 
-
-cell open-mri:user:complex_multiplier:1.0 mult_0 {
-  OPERAND_WIDTH_A 16
-  OPERAND_WIDTH_B 16
-  OPERAND_WIDTH_OUT 16
-  BLOCKING 0
-  STAGES 6
-  ROUND_MODE 1
+cell xilinx.com:ip:cmpy:6.0 mult_0 {
+  FLOWCONTROL NonBlocking
+  APORTWIDTH.VALUE_SRC USER
+  BPORTWIDTH.VALUE_SRC USER
+  APORTWIDTH 16
+  BPORTWIDTH 16
+  OUTPUTWIDTH 16
 } {
-    S_AXIS_A /flocra/TX0_AXIS
-    aclk /pll_0/clk_out1
-	aresetn /rst_0/peripheral_aresetn  
+  S_AXIS_A /flocra/TX0_AXIS
+  aclk /pll_0/clk_out1
 }
 
-cell open-mri:user:complex_multiplier:1.0 mult_1 {
-  OPERAND_WIDTH_A 16
-  OPERAND_WIDTH_B 16
-  OPERAND_WIDTH_OUT 16
-  BLOCKING 0
-  STAGES 6
-  ROUND_MODE 1
+cell xilinx.com:ip:cmpy:6.0 mult_1 {
+  FLOWCONTROL NonBlocking
+  APORTWIDTH.VALUE_SRC USER
+  BPORTWIDTH.VALUE_SRC USER
+  APORTWIDTH 16
+  BPORTWIDTH 16
+  OUTPUTWIDTH 16
 } {
-    S_AXIS_A /flocra/TX1_AXIS
-	aclk /pll_0/clk_out1
-	aresetn /rst_0/peripheral_aresetn
+  S_AXIS_A /flocra/TX1_AXIS
+  aclk /pll_0/clk_out1
 }
+
+# cell open-mri:user:complex_multiplier:1.0 mult_0 {
+  # OPERAND_WIDTH_A 16
+  # OPERAND_WIDTH_B 16
+  # OPERAND_WIDTH_OUT 16
+  # BLOCKING 0
+  # STAGES 6
+  # ROUND_MODE 1
+# } {
+    # S_AXIS_A /flocra/TX0_AXIS
+    # aclk /pll_0/clk_out1
+	# aresetn /rst_0/peripheral_aresetn  
+# }
+
+# cell open-mri:user:complex_multiplier:1.0 mult_1 {
+  # OPERAND_WIDTH_A 16
+  # OPERAND_WIDTH_B 16
+  # OPERAND_WIDTH_OUT 16
+  # BLOCKING 0
+  # STAGES 6
+  # ROUND_MODE 1
+# } {
+    # S_AXIS_A /flocra/TX1_AXIS
+	# aclk /pll_0/clk_out1
+	# aresetn /rst_0/peripheral_aresetn
+# }
 
 # extract the real component of the product using a broadcaster in to I and Q
 # a simpler alternative would be to use a axis_subset_converter
@@ -78,59 +101,59 @@ cell xilinx.com:ip:axis_subset_converter:1.1 dac_truncator {
 
 
 # DDS
-cell open-mri:user:DDS:1.0 tx0_nco {
-    PHASE_DW 24
-    OUT_DW 16
-    USE_TAYLOR 1
-    LUT_DW 9
-    SIN_COS 1
-    NEGATIVE_SINE 1
-} {
-    clk /pll_0/clk_out1
-    S_AXIS_PHASE /flocra/DDS0_PHASE_AXIS
-	reset_n /rst_0/peripheral_aresetn	    
-}
-
-# cell xilinx.com:ip:dds_compiler:6.0 tx0_nco {
-    # PartsPresent SIN_COS_LUT_only
-    # Noise_Shaping Taylor_Series_Corrected
-    # PHASE_WIDTH 24
-    # OUTPUT_WIDTH 16
-    # Memory_Type Auto
-    # Has_Phase_Out false
-    # DSP48_USE Minimal
-    # NEGATIVE_SINE true
+# cell open-mri:user:DDS:1.0 tx0_nco {
+    # PHASE_DW 24
+    # OUT_DW 16
+    # USE_TAYLOR 1
+    # LUT_DW 9
+    # SIN_COS 1
+    # NEGATIVE_SINE 1
 # } {
-    # aclk /pll_0/clk_out1
+    # clk /pll_0/clk_out1
     # S_AXIS_PHASE /flocra/DDS0_PHASE_AXIS
+	# reset_n /rst_0/peripheral_aresetn	    
 # }
 
-cell open-mri:user:DDS:1.0 tx1_nco {
-    PHASE_DW 24
-    OUT_DW 16
-    USE_TAYLOR 1
-    LUT_DW 9
-    SIN_COS 1
-    NEGATIVE_SINE 1
+cell xilinx.com:ip:dds_compiler:6.0 tx0_nco {
+    PartsPresent SIN_COS_LUT_only
+    Noise_Shaping Taylor_Series_Corrected
+    PHASE_WIDTH 24
+    OUTPUT_WIDTH 16
+    Memory_Type Auto
+    Has_Phase_Out false
+    DSP48_USE Minimal
+    NEGATIVE_SINE true
 } {
-    clk /pll_0/clk_out1
-    S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
-	reset_n /rst_0/peripheral_aresetn	    
+    aclk /pll_0/clk_out1
+    S_AXIS_PHASE /flocra/DDS0_PHASE_AXIS
 }
 
-# cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
-    # PartsPresent SIN_COS_LUT_only
-    # Noise_Shaping Taylor_Series_Corrected
-    # PHASE_WIDTH 24
-    # OUTPUT_WIDTH 16
-    # Memory_Type Auto
-    # Has_Phase_Out false
-    # DSP48_USE Minimal
-    # NEGATIVE_SINE true
+# cell open-mri:user:DDS:1.0 tx1_nco {
+    # PHASE_DW 24
+    # OUT_DW 16
+    # USE_TAYLOR 1
+    # LUT_DW 9
+    # SIN_COS 1
+    # NEGATIVE_SINE 1
 # } {
-    # aclk /pll_0/clk_out1
+    # clk /pll_0/clk_out1
     # S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
+	# reset_n /rst_0/peripheral_aresetn	    
 # }
+
+cell xilinx.com:ip:dds_compiler:6.0 tx1_nco {
+    PartsPresent SIN_COS_LUT_only
+    Noise_Shaping Taylor_Series_Corrected
+    PHASE_WIDTH 24
+    OUTPUT_WIDTH 16
+    Memory_Type Auto
+    Has_Phase_Out false
+    DSP48_USE Minimal
+    NEGATIVE_SINE true
+} {
+    aclk /pll_0/clk_out1
+    S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
+}
 
 cell xilinx.com:ip:dds_compiler:6.0 tx2_nco {
     PartsPresent SIN_COS_LUT_only
@@ -157,7 +180,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco0 {
   HAS_TREADY 0
 } {
     M00_AXIS mult_0/S_AXIS_B
-    S_AXIS tx0_nco/M_AXIS_OUT
+    S_AXIS tx0_nco/M_AXIS_DATA
 	aclk /pll_0/clk_out1	
 	aresetn /rst_0/peripheral_aresetn		
 }
@@ -173,7 +196,7 @@ cell xilinx.com:ip:axis_broadcaster:1.1 bcast_nco1 {
   HAS_TREADY 0
 } {
     M00_AXIS mult_1/S_AXIS_B
-    S_AXIS tx1_nco/M_AXIS_OUT
+    S_AXIS tx1_nco/M_AXIS_DATA
 	aclk /pll_0/clk_out1
 	aresetn /rst_0/peripheral_aresetn		
 }
