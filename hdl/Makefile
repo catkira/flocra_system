@@ -12,7 +12,7 @@ PART = xc7z020clg400-1
 HWNAME = stemlab_sdr
 
 CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
-        axis_$(HWNAME)_adc_v1_0 axis_$(HWNAME)_dac_v1_0 \
+        axis_$(HWNAME)_dac_v1_0 \
         axis_zeroer_v1_0 axis_variable_v1_0 axis_interpolator_v1_0 \
         axi_sts_register_v1_0
 else
@@ -26,7 +26,7 @@ CORES_PAVEL = axi_cfg_register_v1_0 axis_constant_v1_0 \
 endif
 PROC = ps7_cortexa9_0
 
-CORES = flocra_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0
+CORES = flocra_v1_0 complex_multiplier_v1_0 CIC_v1_0 DDS_v1_0 stemlab_adc_v1_0
 
 VIVADO = vivado -nolog -nojournal -mode batch
 RM = rm -rf

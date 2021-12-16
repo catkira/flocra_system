@@ -50,8 +50,8 @@ cell xilinx.com:ip:xlconstant const_0
 # ADC
 if {$part_variant=="Z20"} {
 	# Create axis_stemlab_sdr_adc
-	cell pavel-demin:user:axis_stemlab_sdr_adc adc_0 {
-	  ADC_DATA_WIDTH 16
+	cell open-mri:user:stemlab_adc:1.0 adc_0 {
+	  AXIS_TDATA_WIDTH 16
 	} {
 	  aclk pll_0/clk_out1
 	  adc_dat_a adc_dat_a_i
@@ -96,20 +96,6 @@ if {$part_variant=="Z20"} {
 	}
 }
 
-cell xilinx.com:ip:axis_broadcaster:1.1 adc_ab {
-  S_TDATA_NUM_BYTES.VALUE_SRC USER
-  M_TDATA_NUM_BYTES.VALUE_SRC USER
-  S_TDATA_NUM_BYTES 4
-  M_TDATA_NUM_BYTES 2
-  M00_TDATA_REMAP {tdata[15:0]}
-  M01_TDATA_REMAP {tdata[31:16]}
-  HAS_TREADY 0
-} {
-    S_AXIS adc_0/M_AXIS
-	aclk /pll_0/clk_out1
-	aresetn /rst_0/peripheral_aresetn	
-}
-
 cell open-mri:user:flocra:1.0 flocra {
 } {
   s0_axi_aclk pll_0/clk_out1
@@ -126,7 +112,7 @@ set_property OFFSET 0x43C00000 [get_bd_addr_segs ps_0/Data/SEG_flocra_reg0]
 module rx_0 {
   source projects/marcos_fpga/rx.tcl
 } {
-    S_AXIS_ADC adc_ab/M00_AXIS
+    S_AXIS_ADC adc_0/m_axis_a
     comb_iqmerge/M_AXIS flocra/RX0_AXIS
     S_AXIS_RX_RATE flocra/RX0_RATE_AXIS
     S_AXIS_DDS_IQ flocra/RX0_DDS_IQ_AXIS 
@@ -136,7 +122,7 @@ module rx_0 {
 module rx_1 {
   source projects/marcos_fpga/rx.tcl
 } {
-    S_AXIS_ADC adc_ab/M01_AXIS
+    S_AXIS_ADC adc_0/m_axis_b
     comb_iqmerge/M_AXIS flocra/RX1_AXIS
     S_AXIS_RX_RATE flocra/RX1_RATE_AXIS
     S_AXIS_DDS_IQ flocra/RX1_DDS_IQ_AXIS       
