@@ -36,7 +36,7 @@ DTREE_DIR = utils/device-tree-xlnx-$(DTREE_TAG)
 DTREE_TAR = utils/device-tree-xlnx-$(DTREE_TAG).tar.gz
 DTREE_URL = https://github.com/Xilinx/device-tree-xlnx/archive/$(DTREE_TAG).tar.gz
 
-.PRECIOUS: tmp/cores_pavel/% tmp/cores/% tmp/%.xpr tmp/%.hdf tmp/%.bit tmp/%.bit.bin tmp/%.tree/system.dts
+.PRECIOUS: tmp/cores_pavel/% tmp/cores/% tmp/%.xpr tmp/%.xsa tmp/%.bit tmp/%.bit.bin tmp/%.tree/system.dts
 
 all: tmp/$(NAME).bit.bin tmp/$(NAME).dtbo
 
@@ -44,7 +44,9 @@ xpr: tmp/$(NAME).xpr
 
 bit: tmp/$(NAME).bit
 
-hdf: tmp/$(NAME).hdf
+xsa: tmp/$(NAME).xsa
+
+dtbo: tmp/$(NAME).dtbo
 
 $(DTREE_TAR):
 	mkdir -p $(@D)
@@ -66,10 +68,10 @@ tmp/%.xpr: projects/% $(addprefix tmp/cores_pavel/, $(CORES_PAVEL)) $(addprefix 
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/project.tcl -tclargs $* $(PART) $(PART_VARIANT)
 
-tmp/%.hdf: tmp/%.xpr
+tmp/%.xsa: tmp/%.xpr
 	mkdir -p $(@D)
 	$(VIVADO) -source scripts/hwdef.tcl -tclargs $*
-	cp tmp/marcos_fpga.xsa tmp/marcos_fpga.hdf
+	#cp tmp/marcos_fpga.xsa tmp/marcos_fpga.hdf
 
 tmp/%.bit: tmp/%.xpr
 	mkdir -p $(@D)
@@ -79,7 +81,7 @@ tmp/%.bit.bin: tmp/%.bit
 	echo "all:{ $^}" > tmp/marcos_fpga.bif
 	bootgen -image tmp/marcos_fpga.bif -arch zynq -process_bitstream bin -w -o $@
 	
-tmp/%.tree/system.dts: tmp/%.hdf $(DTREE_DIR)
+tmp/%.tree/system.dts: tmp/%.xsa $(DTREE_DIR)
 	mkdir -p $(@D)
 	xsct scripts/devicetree.tcl $(NAME) $(PROC) $(DTREE_DIR)	
 	
