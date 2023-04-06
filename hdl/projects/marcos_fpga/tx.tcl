@@ -85,6 +85,7 @@ cell open-mri:user:DDS:1.0 tx0_nco {
     LUT_DW 9
     SIN_COS 1
     NEGATIVE_SINE 1
+    USE_LUT 0
 } {
     clk /pll_0/clk_out1
     S_AXIS_PHASE /flocra/DDS0_PHASE_AXIS
@@ -112,6 +113,7 @@ cell open-mri:user:DDS:1.0 tx1_nco {
     LUT_DW 9
     SIN_COS 1
     NEGATIVE_SINE 1
+    USE_LUT 0
 } {
     clk /pll_0/clk_out1
     S_AXIS_PHASE /flocra/DDS1_PHASE_AXIS
